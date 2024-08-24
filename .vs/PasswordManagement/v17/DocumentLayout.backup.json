@@ -1,12 +1,135 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "F:\\Repos\\PasswordManagement\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|F:\\Repos\\PasswordManagement\\PasswordManagement\\encryption.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|solutionrelative:PasswordManagement\\encryption.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|F:\\Repos\\PasswordManagement\\PasswordManagement\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|solutionrelative:PasswordManagement\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|F:\\Repos\\PasswordManagement\\PasswordManagement\\UI.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|solutionrelative:PasswordManagement\\UI.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|F:\\Repos\\PasswordManagement\\PasswordManagement\\vault.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|solutionrelative:PasswordManagement\\vault.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|F:\\Repos\\PasswordManagement\\PasswordManagement\\masterPwd.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|solutionrelative:PasswordManagement\\masterPwd.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|F:\\Repos\\PasswordManagement\\PasswordManagement\\fileManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|solutionrelative:PasswordManagement\\fileManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|F:\\Repos\\PasswordManagement\\PasswordManagement\\encryption.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|solutionrelative:PasswordManagement\\encryption.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 5,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "main.cpp",
+              "DocumentMoniker": "F:\\Repos\\PasswordManagement\\PasswordManagement\\main.cpp",
+              "RelativeDocumentMoniker": "PasswordManagement\\main.cpp",
+              "ToolTip": "F:\\Repos\\PasswordManagement\\PasswordManagement\\main.cpp",
+              "RelativeToolTip": "PasswordManagement\\main.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-08-24T09:37:56.742Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "vault.cpp",
+              "DocumentMoniker": "F:\\Repos\\PasswordManagement\\PasswordManagement\\vault.cpp",
+              "RelativeDocumentMoniker": "PasswordManagement\\vault.cpp",
+              "ToolTip": "F:\\Repos\\PasswordManagement\\PasswordManagement\\vault.cpp",
+              "RelativeToolTip": "PasswordManagement\\vault.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-08-24T10:07:20.387Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UI.cpp",
+              "DocumentMoniker": "F:\\Repos\\PasswordManagement\\PasswordManagement\\UI.cpp",
+              "RelativeDocumentMoniker": "PasswordManagement\\UI.cpp",
+              "ToolTip": "F:\\Repos\\PasswordManagement\\PasswordManagement\\UI.cpp",
+              "RelativeToolTip": "PasswordManagement\\UI.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-08-24T10:07:19.807Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "masterPwd.cpp",
+              "DocumentMoniker": "F:\\Repos\\PasswordManagement\\PasswordManagement\\masterPwd.cpp",
+              "RelativeDocumentMoniker": "PasswordManagement\\masterPwd.cpp",
+              "ToolTip": "F:\\Repos\\PasswordManagement\\PasswordManagement\\masterPwd.cpp",
+              "RelativeToolTip": "PasswordManagement\\masterPwd.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-08-24T10:07:19.105Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "fileManager.cpp",
+              "DocumentMoniker": "F:\\Repos\\PasswordManagement\\PasswordManagement\\fileManager.cpp",
+              "RelativeDocumentMoniker": "PasswordManagement\\fileManager.cpp",
+              "ToolTip": "F:\\Repos\\PasswordManagement\\PasswordManagement\\fileManager.cpp",
+              "RelativeToolTip": "PasswordManagement\\fileManager.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-08-24T10:06:31.22Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "encryption.cpp",
+              "DocumentMoniker": "F:\\Repos\\PasswordManagement\\PasswordManagement\\encryption.cpp",
+              "RelativeDocumentMoniker": "PasswordManagement\\encryption.cpp",
+              "ToolTip": "F:\\Repos\\PasswordManagement\\PasswordManagement\\encryption.cpp",
+              "RelativeToolTip": "PasswordManagement\\encryption.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-08-24T09:56:16.869Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "encryption.h",
+              "DocumentMoniker": "F:\\Repos\\PasswordManagement\\PasswordManagement\\encryption.h",
+              "RelativeDocumentMoniker": "PasswordManagement\\encryption.h",
+              "ToolTip": "F:\\Repos\\PasswordManagement\\PasswordManagement\\encryption.h",
+              "RelativeToolTip": "PasswordManagement\\encryption.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-08-24T09:56:22.181Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
