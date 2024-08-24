@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\PasswordManagement"
   ],
-  "SelectedNode": "\\x64",
+  "SelectedNode": "\\PasswordManagement\\encryption.cpp",
   "PreviewInSolutionExplorer": false
 }
