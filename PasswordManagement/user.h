@@ -6,6 +6,9 @@
 class User {
 public:
     // Constructor initializes the User object with a username and loads the master password
+    User(const std::string& username, const std::string& inputPassword);
+
+    // Overload for account creation without a password
     User(const std::string& username);
 
     // Registers a new user by hashing the given password and saving it
@@ -17,6 +20,9 @@ public:
     // Returns the hashed master password
     std::string getMasterKey() const;
 
+    // Returns the username
+    std::string getUsername() const;
+
 private:
     std::string username;        // Stores the username for the user
     std::string hashedPassword;  // Stores the hashed master password
@@ -25,7 +31,7 @@ private:
     std::string hashPassword(const std::string& password);
 
     // Loads the hashed master password from a file
-    bool loadMasterPassword();
+    bool loadMasterPassword(const std::string& inputPassword);
 
     // Saves the hashed master password to a file
     void saveMasterPassword();

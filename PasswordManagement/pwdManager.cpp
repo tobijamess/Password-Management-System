@@ -4,8 +4,9 @@
 #include <unordered_map>
 
 // Constructor initializes the PasswordManager with the given master key
-PasswordManager::PasswordManager(const std::string& masterKey)
-    : masterKey(masterKey) {}
+PasswordManager::PasswordManager(const std::string& key)
+    : masterKey(key) {
+}
 
 // Adds a new password to the database, encrypting it first
 void PasswordManager::addPassword(const std::string& account, const std::string& password) {
@@ -26,9 +27,7 @@ std::string PasswordManager::getPassword(const std::string& account) const {
 
 // Returns the entire password database
 std::unordered_map<std::string, std::string> PasswordManager::getPasswordDatabase() const {
-    if (passwordDatabase.empty()) {
-        throw std::runtime_error("No passwords stored.");
-    }
+    // Do not throw an exception just return the database (even if empty)
     return passwordDatabase;
 }
 

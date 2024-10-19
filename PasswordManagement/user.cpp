@@ -1,4 +1,5 @@
 #include "user.h"
+#include <iostream>
 #include <openssl/sha.h>
 #include <sstream>
 #include <iomanip>
@@ -6,10 +7,20 @@
 #include <stdexcept>
 
 // Constructor initializes the User object with a username and attempts to load the master password
-User::User(const std::string& username) : username(username) {
-    if (!loadMasterPassword()) {
-        throw std::runtime_error("Failed to load master password for user: " + username);
+User::User(const std::string& username, const std::string& inputPassword) : username(username) {
+    if (!loadMasterPassword(inputPassword)) {
+        throw std::runtime_error("Failed to authenticate user: " + username);
     }
+}
+
+// Constructor for account creation (username only)
+User::User(const std::string& username) : username(username) {
+
+}
+
+// Returns the username
+std::string User::getUsername() const {
+    return username;
 }
 
 // Hashes the given password using SHA-256 and returns the resulting hexadecimal string
@@ -39,23 +50,37 @@ bool User::login(const std::string& password) {
 
 // Saves the hashed master password to a file
 void User::saveMasterPassword() {
-    std::ofstream outFile("masterPwd.txt");
+    std::string filename = username + "_masterPwd.txt"; //Uses username to create unique master password file
+    std::ofstream outFile(filename);
     if (!outFile.is_open()) {
-        throw std::runtime_error("Failed to open masterPwd.txt for writing"); // Error if file can't be opened
+        throw std::runtime_error("Failed to open " + filename + " masterPwd.txt for writing"); // Error if file can't be opened
     }
     outFile << hashedPassword; // Write the hashed password to the file
     outFile.close();
 }
 
 // Loads the hashed master password from a file
-bool User::loadMasterPassword() {
-    std::ifstream inFile("masterPwd.txt");
-    if (inFile.is_open()) {
-        std::getline(inFile, hashedPassword); // Read the hashed password from the file
-        inFile.close();
+bool User::loadMasterPassword(const std::string& inputPassword) {
+    std::string filename = username + "_masterPwd.txt";
+    std::ifstream inFile(filename);
+    if (!inFile.is_open()) {
+        throw std::runtime_error("Failed to open " + filename + " masterPwd.txt for reading");
+    }
+
+    std::string storedHashedPassword;
+    inFile >> storedHashedPassword; // Read hashed password from file
+    inFile.close();
+
+    std::string inputHashedPassword = hashPassword(inputPassword);
+
+    // Ensure the stored hashed password is set correctly in the object after login
+    if (storedHashedPassword == inputHashedPassword) {
+        hashedPassword = storedHashedPassword;  // Store the hashed password in the User object
         return true;
     }
-    return false; // Return false if file can't be opened or read
+    else {
+        return false;
+    }
 }
 
 // Returns the hashed master password
