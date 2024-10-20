@@ -1,4 +1,7 @@
 #include <iostream>
+#include <iomanip>
+#include <sstream>
+#include <vector>
 #include "user.h"
 #include "database.h"
 #include "pwdManager.h"
@@ -6,6 +9,7 @@
 #include <openssl/rand.h>
 #include <openssl/ssl.h>
 #include <openssl/err.h>
+#include <openssl/rand.h>
 
 // Function to initialize OpenSSL libraries
 void initializeOpenSSL() {
@@ -13,6 +17,33 @@ void initializeOpenSSL() {
     OpenSSL_add_all_algorithms();  // Load encryption algorithms
     ERR_load_crypto_strings();  // Load error strings for diagnostics
 }
+
+// Function to generate a random secure password
+std::string generateSecurePassword(int length) {
+    const char charset[] =
+        "0123456789"
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        "abcdefghijklmnopqrstuvwxyz"
+        "!@#$%^&*()-_=+[]{}<>?";
+
+    std::string password;
+    password.resize(length);
+
+    // Use a vector to dynamically allocate memory for the random bytes
+    std::vector<unsigned char> randomBytes(length);
+
+    if (RAND_bytes(randomBytes.data(), length) != 1) {
+        throw std::runtime_error("Error generating random bytes for password.");
+    }
+
+    // Map random bytes to character set
+    for (int i = 0; i < length; ++i) {
+        password[i] = charset[randomBytes[i] % (sizeof(charset) - 1)];
+    }
+
+    return password;
+}
+
 
 int main() {
     initializeOpenSSL();  // Initialize OpenSSL
@@ -119,8 +150,27 @@ int main() {
                 std::string account, password;
                 std::cout << "Enter platform or app name: ";
                 std::cin >> account;
-                std::cout << "Enter your password: ";
-                std::cin >> password;
+
+                int passwordChoice;
+                std::cout << "1. Enter your password\n2. Generate a secure password\nChoose an option: ";
+                std::cin >> passwordChoice;
+
+                if (passwordChoice == 1) {
+                    std::cout << "Enter your password: ";
+                    std::cin >> password;
+                }
+                else if (passwordChoice == 2) {
+                    int length;
+                    std::cout << "Enter desired password length: ";
+                    std::cin >> length;
+
+                    password = generateSecurePassword(length);
+                    std::cout << "Generated password: " << password << std::endl;
+                }
+                else {
+                    std::cout << "Invalid option!\n";
+                    continue;
+                }
 
                 // Add password to the manager
                 pm.addPassword(account, password);
