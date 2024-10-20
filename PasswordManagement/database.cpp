@@ -73,7 +73,7 @@ std::unordered_map<std::string, std::string> Database::loadPasswordDatabase() {
         // Ensure that both the account and encrypted password are being read correctly
         if (!account.empty() && !encryptedPassword.empty()) {
             passwordDatabase[account] = encryptedPassword;
-            std::cout << "Loaded: Account = " << account << ", Encrypted Password = " << encryptedPassword << std::endl;  // Logging
+            /* std::cout << "Loaded: Account = " << account << ", Encrypted Password = " << encryptedPassword << std::endl; */ 
         }
     }
 
