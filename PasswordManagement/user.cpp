@@ -1,4 +1,5 @@
 #include "user.h"
+#include "pwdStrength.h"
 #include <openssl/sha.h>
 #include <fstream>
 #include <iostream>
@@ -35,6 +36,12 @@ std::string User::hashPassword(const std::string& password) {
 
 // Register a new user by hashing the password and saving it
 bool User::registerUser(const std::string& password) {
+    PasswordStrength strength = evaluatePasswordStrength(password);
+
+    if (strength == Weak) {
+        throw std::runtime_error("Weak password. Please choose a stronger password.");
+    }
+
     hashedPassword = hashPassword(password);
     saveMasterPassword();
     return true;

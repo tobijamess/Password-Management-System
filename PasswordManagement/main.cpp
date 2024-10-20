@@ -2,10 +2,13 @@
 #include <iomanip>
 #include <sstream>
 #include <vector>
+
 #include "user.h"
+#include "encryption.h"
 #include "database.h"
 #include "pwdManager.h"
-#include "encryption.h"
+#include "pwdStrength.h"
+
 #include <openssl/rand.h>
 #include <openssl/ssl.h>
 #include <openssl/err.h>
@@ -72,11 +75,22 @@ int main() {
                     continue;
                 }
 
-                // Prompt for master password and confirmation
-                std::string masterPasswordConfirmation;
+                // Prompt for master password
+                std::string masterPassword, masterPasswordConfirmation;
                 while (true) {
                     std::cout << "Enter master password: ";
                     std::cin >> masterPassword;
+
+                    // Password strength evaluation
+                    PasswordStrength strength = evaluatePasswordStrength(masterPassword);
+                    displayPasswordStrength(strength);
+
+                    if (strength == Weak) {
+                        std::cout << "Your password is too weak. Please choose a stronger one.\n";
+                        continue;
+                    }
+
+                    // Now confirm the password
                     std::cout << "Confirm master password: ";
                     std::cin >> masterPasswordConfirmation;
 
@@ -103,6 +117,7 @@ int main() {
                 std::cout << "Account created successfully!\n";
                 authenticated = true;  // User is now authenticated
             }
+
             else if (choice == 2) {
                 // User selects login
                 std::cout << "Enter username: ";
@@ -156,8 +171,23 @@ int main() {
                 std::cin >> passwordChoice;
 
                 if (passwordChoice == 1) {
-                    std::cout << "Enter your password: ";
-                    std::cin >> password;
+                    bool validPassword = false; // Initialize password validity flag
+
+                    while (!validPassword) {
+                        std::cout << "Enter your password: ";
+                        std::cin >> password;
+
+                        // Password strength evaluation
+                        PasswordStrength strength = evaluatePasswordStrength(password);
+                        displayPasswordStrength(strength);
+
+                        if (strength == Weak) {
+                            std::cout << "Your password is too weak. Please choose a stronger one.\n";
+                        }
+                        else {
+                            validPassword = true; // Exit the loop if password is strong enough
+                        }
+                    }
                 }
                 else if (passwordChoice == 2) {
                     int length;
