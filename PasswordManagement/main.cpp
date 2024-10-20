@@ -41,9 +41,21 @@ int main() {
                     continue;
                 }
 
-                // Prompt for master password
-                std::cout << "Enter master password: ";
-                std::cin >> masterPassword;
+                // Prompt for master password and confirmation
+                std::string masterPasswordConfirmation;
+                while (true) {
+                    std::cout << "Enter master password: ";
+                    std::cin >> masterPassword;
+                    std::cout << "Confirm master password: ";
+                    std::cin >> masterPasswordConfirmation;
+
+                    if (masterPassword == masterPasswordConfirmation) {
+                        break;  // Proceed if the passwords match
+                    }
+                    else {
+                        std::cout << "Passwords do not match. Please try again.\n";
+                    }
+                }
 
                 // Register new user
                 User user(username);
