@@ -148,6 +148,28 @@ bool User::loadUserEmail() {
     return true;
 }
 
+bool User::updateMasterPassword(const std::string& newPassword) {
+    PasswordStrength strength = evaluatePasswordStrength(newPassword);
+
+    if (strength == Weak) {
+        std::cerr << "Weak password. Please choose a stronger password." << std::endl;
+        return false; // Fail if the password is weak
+    }
+
+    // Hash the new password
+    hashedPassword = hashPassword(newPassword);
+
+    // Save the new master password to the file
+    try {
+        saveMasterPassword();
+        return true;
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Failed to save the updated password: " << e.what() << std::endl;
+        return false;
+    }
+}
+
 // Return the hashed master key
 std::string User::getMasterKey() const {
     return hashedPassword;

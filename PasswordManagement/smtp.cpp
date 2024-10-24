@@ -30,8 +30,8 @@ bool sendRecoveryEmail(const std::string& email, const std::string& recoveryCode
     curl = curl_easy_init();
 
     if (curl) {
-        std::string mailjetApiKey = "API-KEY";
-        std::string mailjetSecretKey = "API-SECRET-KEY";
+        std::string mailjetApiKey = "example";
+        std::string mailjetSecretKey = "example";
 
         // Set up email recipients
         struct curl_slist* recipients = nullptr;
@@ -65,7 +65,8 @@ bool sendRecoveryEmail(const std::string& email, const std::string& recoveryCode
         curl_easy_setopt(curl, CURLOPT_MAIL_RCPT, recipients);  // Set email recipient
 
         // Specify path to CA cert bundle
-        curl_easy_setopt(curl, CURLOPT_CAINFO, "F:/Repos/PasswordManagement/PasswordManagement/openssl/tests/certs/cacert-2024-09-24.pem");
+        // curl_easy_setopt(curl, CURLOPT_CAINFO, "resources/cacert-2024-09-24.pem"); // For release
+        curl_easy_setopt(curl, CURLOPT_CAINFO, "openssl/tests/certs/cacert-2024-09-24.pem");    // For debug
 
         // Perform the request
         res = curl_easy_perform(curl);

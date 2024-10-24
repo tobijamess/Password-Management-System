@@ -43,6 +43,79 @@ std::string generateSecurePassword(int length) {
     return password;
 }
 
+// Function to handle password recovery
+void handlePasswordRecovery(const std::string& username) {
+    try {
+        // Load user with only username to retrieve email
+        User user(username, "", 2);  // Constructor to load user data without password
+
+        // Load the user's email from the file
+        if (!user.loadUserEmail()) {
+            std::cout << "Failed to load email for the user.\n";
+            return;
+        }
+
+        std::string storedEmail = user.getEmail();
+        if (storedEmail.empty()) {
+            std::cout << "No email found for this account. Please contact support.\n";
+            return;
+        }
+
+        // Generate and send recovery code
+        std::string recoveryCode = generateRecoveryCode();
+        if (!sendRecoveryEmail(storedEmail, recoveryCode)) {
+            std::cout << "Failed to send recovery email. Please try again later.\n";
+            return;
+        }
+        std::cout << "Recovery email sent to " << storedEmail << ".\n";
+
+        // Prompt the user to enter the recovery code
+        std::string enteredCode;
+        std::cout << "Enter the recovery code sent to your email: ";
+        std::cin >> enteredCode;
+
+        // Verify the entered code
+        if (enteredCode == recoveryCode) {
+            std::cout << "Recovery code verified. You can now reset your password.\n";
+
+            // Prompt user to reset the password
+            std::string newPassword, passwordConfirmation;
+            while (true) {
+                std::cout << "Enter new master password: ";
+                std::cin >> newPassword;
+
+                PasswordStrength strength = evaluatePasswordStrength(newPassword);
+                displayPasswordStrength(strength);
+
+                if (strength == Weak) {
+                    std::cout << "Your password is too weak. Please choose a stronger one.\n";
+                    continue;
+                }
+
+                std::cout << "Confirm new master password: ";
+                std::cin >> passwordConfirmation;
+
+                if (newPassword == passwordConfirmation) {
+                    // Update the master password and save the changes
+                    user.updateMasterPassword(newPassword);
+                    std::cout << "Password has been reset successfully!\n";
+                    break;
+                }
+                else {
+                    std::cout << "Passwords do not match. Please try again.\n";
+                }
+            }
+        }
+        else {
+            std::cout << "Invalid recovery code. Please try again.\n";
+        }
+
+    }
+    catch (const std::exception& e) {
+        std::cout << "Error: " << e.what() << "\n";
+    }
+}
+
 // Main function
 int main() {
     initializeOpenSSL();  // Initialize OpenSSL
@@ -142,33 +215,7 @@ int main() {
                     std::cin >> forgotPasswordChoice;
 
                     if (forgotPasswordChoice == 1) {
-                        try {
-                            // Load user with only username
-                            User user(username, "", 2);  // You're using the constructor with the wrong flag here
-
-                            // Add a line to load the user's email from the file
-                            if (!user.loadUserEmail()) {  // This will now load the email properly
-                                std::cout << "Failed to load email for the user.\n";
-                            }
-                            else {
-                                std::string storedEmail = user.getEmail();
-                                if (storedEmail.empty()) {
-                                    std::cout << "No email found for this account. Please contact support.\n";
-                                }
-                                else {
-                                    std::string recoveryCode = generateRecoveryCode();
-                                    if (sendRecoveryEmail(storedEmail, recoveryCode)) {
-                                        std::cout << "Recovery email sent to " << storedEmail << ".\n";
-                                    }
-                                    else {
-                                        std::cout << "Failed to send recovery email. Please try again later.\n";
-                                    }
-                                }
-                            }
-                        }
-                        catch (const std::exception& e) {
-                            std::cout << "Error: " << e.what() << "\n";
-                        }
+                        handlePasswordRecovery(username);
                     }
                 }
             }

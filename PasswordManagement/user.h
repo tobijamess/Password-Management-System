@@ -12,6 +12,8 @@ public:
     // Registers a new user by hashing the given password and saving it
     bool registerUser(const std::string& password);
 
+    bool updateMasterPassword(const std::string& newPassword); // Update the master password
+
     std::string getMasterKey() const;  // Returns the hashed master password
     std::string getUsername() const;   // Returns the username
     std::string getEmail() const;      // Returns the email
