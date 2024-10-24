@@ -2,23 +2,21 @@
 #include <iomanip>
 #include <sstream>
 #include <vector>
-
 #include "user.h"
 #include "encryption.h"
 #include "database.h"
 #include "pwdManager.h"
 #include "pwdStrength.h"
-
+#include "smtp.h"
 #include <openssl/rand.h>
 #include <openssl/ssl.h>
 #include <openssl/err.h>
-#include <openssl/rand.h>
 
 // Function to initialize OpenSSL libraries
 void initializeOpenSSL() {
-    SSL_library_init();  // Initialize the OpenSSL library
+    /* SSL_library_init();  // Initialize the OpenSSL library
     OpenSSL_add_all_algorithms();  // Load encryption algorithms
-    ERR_load_crypto_strings();  // Load error strings for diagnostics
+    ERR_load_crypto_strings();  // Load error strings for diagnostics */
 }
 
 // Function to generate a random secure password
@@ -32,9 +30,7 @@ std::string generateSecurePassword(int length) {
     std::string password;
     password.resize(length);
 
-    // Use a vector to dynamically allocate memory for the random bytes
     std::vector<unsigned char> randomBytes(length);
-
     if (RAND_bytes(randomBytes.data(), length) != 1) {
         throw std::runtime_error("Error generating random bytes for password.");
     }
@@ -47,29 +43,30 @@ std::string generateSecurePassword(int length) {
     return password;
 }
 
-
+// Main function
 int main() {
     initializeOpenSSL();  // Initialize OpenSSL
 
-    std::string username, masterPassword;  // Store user's username and master password
-    int choice;  // Store the user's choice for menu options
+    std::string username, masterPassword, email;
+    int choice;
 
     while (true) {
-        // Outer loop: Manage user authentication
         PasswordManager pm("");  // Initialize PasswordManager with an empty key
-        bool authenticated = false;  // Track if the user is authenticated
+        bool authenticated = false;
 
+        // Authentication loop
         while (!authenticated) {
-            // Authentication loop
-            std::cout << "\n--- Welcome to Password Manager! ---\n1. Create a new account\n2. Log in\n3. Exit\nChoose an option: ";
+            std::cout << "\n--- Welcome to Password Manager! ---\n";
+            std::cout << "1. Create a new account\n2. Log in\n3. Exit\nChoose an option: ";
             std::cin >> choice;
 
             if (choice == 1) {
-                // User selects account creation
-                std::cout << "Enter username: ";
+                // Create new account
+                std::cout << "Enter desired username: ";
                 std::cin >> username;
+                std::cout << "Enter your email: ";
+                std::cin >> email;
 
-                // Check if the account already exists
                 if (Database::doesDatabaseExist(username)) {
                     std::cout << "This account already exists. Log in or use a different username.\n";
                     continue;
@@ -81,7 +78,6 @@ int main() {
                     std::cout << "Enter master password: ";
                     std::cin >> masterPassword;
 
-                    // Password strength evaluation
                     PasswordStrength strength = evaluatePasswordStrength(masterPassword);
                     displayPasswordStrength(strength);
 
@@ -90,12 +86,11 @@ int main() {
                         continue;
                     }
 
-                    // Now confirm the password
                     std::cout << "Confirm master password: ";
                     std::cin >> masterPasswordConfirmation;
 
                     if (masterPassword == masterPasswordConfirmation) {
-                        break;  // Proceed if the passwords match
+                        break;
                     }
                     else {
                         std::cout << "Passwords do not match. Please try again.\n";
@@ -103,65 +98,98 @@ int main() {
                 }
 
                 // Register new user
-                User user(username);
+                User user(username, email, 0);
                 user.registerUser(masterPassword);
 
-                // Create an empty database for the new user
+                // Create empty password database
                 Database db(user.getUsername());
                 db.createEmptyDatabase();
 
-                // Initialize PasswordManager with the user's master key
                 pm = PasswordManager(user.getMasterKey());
                 pm.loadDatabase(db.loadPasswordDatabase());
 
                 std::cout << "Account created successfully!\n";
-                authenticated = true;  // User is now authenticated
+                authenticated = true;
             }
-
             else if (choice == 2) {
-                // User selects login
+                // Log in
                 std::cout << "Enter username: ";
                 std::cin >> username;
                 std::cout << "Enter master password: ";
                 std::cin >> masterPassword;
 
                 try {
-                    // Load user data and authenticate with the provided password
-                    User user(username, masterPassword);
+                    User user(username, masterPassword, 1);
                     pm = PasswordManager(user.getMasterKey());
 
                     // Load the password database
                     Database db(user.getUsername());
-                    pm.loadDatabase(db.loadPasswordDatabase());
 
+                    if (!Database::doesDatabaseExist(username)) {
+                        std::cout << "Password database file missing. Creating a new one...\n";
+                        db.createEmptyDatabase();
+                    }
+
+                    pm.loadDatabase(db.loadPasswordDatabase());
                     std::cout << "Login successful!\n";
-                    authenticated = true;  // User is now authenticated
+                    authenticated = true;
                 }
                 catch (const std::exception& e) {
-                    std::cout << e.what() << std::endl;
-                    continue;  // Retry login if authentication fails
+                    std::cout << "Authentication failed: " << e.what() << "\n";
+
+                    int forgotPasswordChoice;
+                    std::cout << "Forgot Password? (1. Yes  2. No): ";
+                    std::cin >> forgotPasswordChoice;
+
+                    if (forgotPasswordChoice == 1) {
+                        try {
+                            // Load user with only username
+                            User user(username, "", 2);  // You're using the constructor with the wrong flag here
+
+                            // Add a line to load the user's email from the file
+                            if (!user.loadUserEmail()) {  // This will now load the email properly
+                                std::cout << "Failed to load email for the user.\n";
+                            }
+                            else {
+                                std::string storedEmail = user.getEmail();
+                                if (storedEmail.empty()) {
+                                    std::cout << "No email found for this account. Please contact support.\n";
+                                }
+                                else {
+                                    std::string recoveryCode = generateRecoveryCode();
+                                    if (sendRecoveryEmail(storedEmail, recoveryCode)) {
+                                        std::cout << "Recovery email sent to " << storedEmail << ".\n";
+                                    }
+                                    else {
+                                        std::cout << "Failed to send recovery email. Please try again later.\n";
+                                    }
+                                }
+                            }
+                        }
+                        catch (const std::exception& e) {
+                            std::cout << "Error: " << e.what() << "\n";
+                        }
+                    }
                 }
             }
             else if (choice == 3) {
-                // Exit the program
                 std::cout << "Exiting...\n";
                 return 0;
             }
             else {
-                std::cout << "Invalid option!\n";  // Handle invalid input
+                std::cout << "Invalid option!\n";
             }
         }
 
-        // Main menu loop: After successful authentication
-        int menuChoice;
+        // Main menu
         while (true) {
+            int menuChoice;
             std::cout << "\n--- Password Manager Menu ---\n";
             std::cout << "1. Add New Password\n2. Show Stored Passwords\n3. Log Out\n4. Exit\nChoose an option: ";
             std::cin >> menuChoice;
 
             if (menuChoice == 1) {
-                // Option to add a new password
-                std::cout << "\n--- Adding Passwords ---\n";
+                // Add a new password
                 std::string account, password;
                 std::cout << "Enter platform or app name: ";
                 std::cin >> account;
@@ -171,13 +199,12 @@ int main() {
                 std::cin >> passwordChoice;
 
                 if (passwordChoice == 1) {
-                    bool validPassword = false; // Initialize password validity flag
+                    bool validPassword = false;
 
                     while (!validPassword) {
                         std::cout << "Enter your password: ";
                         std::cin >> password;
 
-                        // Password strength evaluation
                         PasswordStrength strength = evaluatePasswordStrength(password);
                         displayPasswordStrength(strength);
 
@@ -185,7 +212,7 @@ int main() {
                             std::cout << "Your password is too weak. Please choose a stronger one.\n";
                         }
                         else {
-                            validPassword = true; // Exit the loop if password is strong enough
+                            validPassword = true;
                         }
                     }
                 }
@@ -202,10 +229,8 @@ int main() {
                     continue;
                 }
 
-                // Add password to the manager
                 pm.addPassword(account, password);
 
-                // Save the updated password database
                 Database db(username);
                 if (db.savePasswordDatabase(pm.getPasswordDatabase())) {
                     std::cout << "Password added successfully!\n";
@@ -215,24 +240,22 @@ int main() {
                 }
             }
             else if (menuChoice == 2) {
-                // Option to show stored passwords
+                // Show stored passwords
                 std::cout << "\n--- Viewing Stored Passwords ---\n";
                 for (const auto& entry : pm.getPasswordDatabase()) {
                     std::cout << "Account: " << entry.first << ", Password: " << pm.getPassword(entry.first) << std::endl;
                 }
             }
             else if (menuChoice == 3) {
-                // Log out: Reset authentication
                 std::cout << "Logging out...\n";
                 break;
             }
             else if (menuChoice == 4) {
-                // Exit the program
                 std::cout << "Exiting...\n";
                 return 0;
             }
             else {
-                std::cout << "Invalid option!\n";  // Handle invalid input
+                std::cout << "Invalid option!\n";
             }
         }
     }

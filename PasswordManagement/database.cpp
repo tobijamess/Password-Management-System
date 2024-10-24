@@ -2,7 +2,13 @@
 #include <iostream>
 #include <fstream>
 #include <stdexcept>
+
+#ifdef _WIN32
+#include <sys/types.h>
 #include <sys/stat.h>
+#define STAT_STRUCT _stat64  // Use _stat64 for Windows
+#define STAT_FUNCTION _stat64
+#endif
 
 // Constructor: Initialize with a specific filename
 Database::Database(const std::string& username) {
@@ -15,8 +21,8 @@ Database::Database(const std::string& username) {
 
 // Helper function to check if a file exists
 bool fileExists(const std::string& filename) {
-    struct stat buffer;
-    return (stat(filename.c_str(), &buffer) == 0);
+    struct STAT_STRUCT buffer;
+    return (STAT_FUNCTION(filename.c_str(), &buffer) == 0);
 }
 
 // Checks if the user-specific database file already exists
@@ -27,11 +33,24 @@ bool Database::doesDatabaseExist(const std::string& username) {
 
 // Creates an empty password database for a new user
 void Database::createEmptyDatabase() {
-    std::ofstream file(dbFilename);  // Create the file
-    if (!file.is_open()) {
-        throw std::runtime_error("Failed to create " + dbFilename);
+    std::string dbFilePath = dbFilename;  // Use the user-specific filename
+
+    // Log the file path
+    std::cout << "Attempting to create empty database at: " << dbFilePath << std::endl;
+
+    // Open the file in write mode to create an empty file if it doesn't exist
+    std::ofstream dbFile(dbFilePath, std::ios::out);
+
+    if (!dbFile) {
+        std::cerr << "Error: Could not create database file at " << dbFilePath << std::endl;
+        std::cerr << "Possible issues: incorrect file path, lack of write permissions, or directory issues." << std::endl;
+        return;
     }
-    file.close();
+
+    // Log success
+    std::cout << "Empty database file created successfully at " << dbFilePath << std::endl;
+
+    dbFile.close();
 }
 
 // Saves the password database to a user-specific file
