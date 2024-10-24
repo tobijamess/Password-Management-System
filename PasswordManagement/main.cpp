@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <sstream>
 #include <vector>
+#include <limits>
 #include "user.h"
 #include "encryption.h"
 #include "database.h"
@@ -11,6 +12,8 @@
 #include <openssl/rand.h>
 #include <openssl/ssl.h>
 #include <openssl/err.h>
+
+#define NOMINMAX
 
 // Function to initialize OpenSSL libraries
 void initializeOpenSSL() {
@@ -44,7 +47,7 @@ std::string generateSecurePassword(int length) {
 }
 
 // Function to handle password recovery
-void handlePasswordRecovery(const std::string& username) {
+void passwordRecovery(const std::string& username) {
     try {
         // Load user with only username to retrieve email
         User user(username, "", 2);  // Constructor to load user data without password
@@ -70,9 +73,7 @@ void handlePasswordRecovery(const std::string& username) {
         std::cout << "Recovery email sent to " << storedEmail << ".\n";
 
         // Prompt the user to enter the recovery code
-        std::string enteredCode;
-        std::cout << "Enter the recovery code sent to your email: ";
-        std::cin >> enteredCode;
+        std::string enteredCode = getTrimmedInput("Enter the recovery code sent to your email: ");
 
         // Verify the entered code
         if (enteredCode == recoveryCode) {
@@ -81,8 +82,7 @@ void handlePasswordRecovery(const std::string& username) {
             // Prompt user to reset the password
             std::string newPassword, passwordConfirmation;
             while (true) {
-                std::cout << "Enter new master password: ";
-                std::cin >> newPassword;
+                newPassword = getTrimmedInput("Enter new master password: ");
 
                 PasswordStrength strength = evaluatePasswordStrength(newPassword);
                 displayPasswordStrength(strength);
@@ -92,8 +92,7 @@ void handlePasswordRecovery(const std::string& username) {
                     continue;
                 }
 
-                std::cout << "Confirm new master password: ";
-                std::cin >> passwordConfirmation;
+                passwordConfirmation = getTrimmedInput("Confirm new master password: ");
 
                 if (newPassword == passwordConfirmation) {
                     // Update the master password and save the changes
@@ -132,13 +131,12 @@ int main() {
             std::cout << "\n--- Welcome to Password Manager! ---\n";
             std::cout << "1. Create a new account\n2. Log in\n3. Exit\nChoose an option: ";
             std::cin >> choice;
+            std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');  // Clear the input buffer
 
             if (choice == 1) {
                 // Create new account
-                std::cout << "Enter desired username: ";
-                std::cin >> username;
-                std::cout << "Enter your email: ";
-                std::cin >> email;
+                username = getTrimmedInput("Enter desired username: ");
+                email = getTrimmedInput("Enter your email: ");
 
                 if (Database::doesDatabaseExist(username)) {
                     std::cout << "This account already exists. Log in or use a different username.\n";
@@ -148,8 +146,7 @@ int main() {
                 // Prompt for master password
                 std::string masterPassword, masterPasswordConfirmation;
                 while (true) {
-                    std::cout << "Enter master password: ";
-                    std::cin >> masterPassword;
+                    masterPassword = getTrimmedInput("Enter master password: ");
 
                     PasswordStrength strength = evaluatePasswordStrength(masterPassword);
                     displayPasswordStrength(strength);
@@ -159,8 +156,7 @@ int main() {
                         continue;
                     }
 
-                    std::cout << "Confirm master password: ";
-                    std::cin >> masterPasswordConfirmation;
+                    masterPasswordConfirmation = getTrimmedInput("Confirm master password: ");
 
                     if (masterPassword == masterPasswordConfirmation) {
                         break;
@@ -186,10 +182,8 @@ int main() {
             }
             else if (choice == 2) {
                 // Log in
-                std::cout << "Enter username: ";
-                std::cin >> username;
-                std::cout << "Enter master password: ";
-                std::cin >> masterPassword;
+                username = getTrimmedInput("Enter username: ");
+                masterPassword = getTrimmedInput("Enter master password: ");
 
                 try {
                     User user(username, masterPassword, 1);
@@ -211,11 +205,12 @@ int main() {
                     std::cout << "Authentication failed: " << e.what() << "\n";
 
                     int forgotPasswordChoice;
-                    std::cout << "Forgot Password? (1. Yes  2. No): ";
+                    std::cout << "Forgot Password?\n1. Yes.\n2. No, try again.\n";
                     std::cin >> forgotPasswordChoice;
+                    std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
 
                     if (forgotPasswordChoice == 1) {
-                        handlePasswordRecovery(username);
+                        passwordRecovery(username);
                     }
                 }
             }
@@ -234,23 +229,23 @@ int main() {
             std::cout << "\n--- Password Manager Menu ---\n";
             std::cout << "1. Add New Password\n2. Show Stored Passwords\n3. Log Out\n4. Exit\nChoose an option: ";
             std::cin >> menuChoice;
+            std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
 
             if (menuChoice == 1) {
                 // Add a new password
                 std::string account, password;
-                std::cout << "Enter platform or app name: ";
-                std::cin >> account;
+                account = getTrimmedInput("Enter platform or app name: ");
 
                 int passwordChoice;
                 std::cout << "1. Enter your password\n2. Generate a secure password\nChoose an option: ";
                 std::cin >> passwordChoice;
+                std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
 
                 if (passwordChoice == 1) {
                     bool validPassword = false;
 
                     while (!validPassword) {
-                        std::cout << "Enter your password: ";
-                        std::cin >> password;
+                        password = getTrimmedInput("Enter your password: ");
 
                         PasswordStrength strength = evaluatePasswordStrength(password);
                         displayPasswordStrength(strength);
@@ -267,6 +262,7 @@ int main() {
                     int length;
                     std::cout << "Enter desired password length: ";
                     std::cin >> length;
+                    std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
 
                     password = generateSecurePassword(length);
                     std::cout << "Generated password: " << password << std::endl;

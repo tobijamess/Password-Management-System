@@ -107,6 +107,24 @@ std::string trim(const std::string& str) {
     return str.substr(first, (last - first + 1));
 }
 
+// Function to get trimmed user input from the console
+std::string getTrimmedInput(const std::string& prompt) {
+    std::string input;
+    while (true) {
+        std::cout << prompt;
+        std::getline(std::cin, input);  // Get the full line of input
+        input = trim(input);  // Trim the input
+
+        if (input.empty()) {
+            std::cout << "Input cannot be empty or contain only spaces. Please try again.\n";
+        }
+        else {
+            break;  // Valid input
+        }
+    }
+    return input;
+}
+
 // Load the hashed master password from a file and compare with input password
 bool User::loadMasterPassword(const std::string& inputPassword) {
     std::string filePath = username + "_masterPwd.txt";
@@ -163,8 +181,7 @@ bool User::updateMasterPassword(const std::string& newPassword) {
     try {
         saveMasterPassword();
         return true;
-    }
-    catch (const std::exception& e) {
+    } catch (const std::exception& e) {
         std::cerr << "Failed to save the updated password: " << e.what() << std::endl;
         return false;
     }

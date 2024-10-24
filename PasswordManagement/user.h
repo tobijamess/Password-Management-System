@@ -31,4 +31,6 @@ private:
     
 };
 
+std::string getTrimmedInput(const std::string& prompt);
+
 #endif // USER_H
