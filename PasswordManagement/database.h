@@ -25,8 +25,4 @@ private:
     std::string dbFilename;  // Stores the name of the user-specific database file
 };
 
-
 #endif // DATABASE_H
-
-
-

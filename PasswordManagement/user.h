@@ -1,6 +1,5 @@
 #ifndef USER_H
 #define USER_H
-
 #include <string>
 
 class User {
@@ -16,8 +15,14 @@ public:
 
     std::string getMasterKey() const;  // Returns the hashed master password
     std::string getUsername() const;   // Returns the username
+
     std::string getEmail() const;      // Returns the email
     bool loadUserEmail();              // Loads users email
+
+    bool sendConfirmationCode();                           // Send the confirmation code
+    bool verifyConfirmationCode(const std::string& code);  // Verify the confirmation code
+    void lockAccount();                                    // Lock the user account until confirmed
+    void unlockAccount();                                  // Unlock the user account
 
 private:
     std::string username;        // Stores the username for the user
@@ -28,6 +33,8 @@ private:
     bool loadMasterPassword(const std::string& inputPassword); // Loads the hashed master password from a file
     void saveMasterPassword();                                 // Saves the hashed master password
     void saveUserEmail();                                      // Saves the users email
+    std::string confirmationCode;                              // Store the confirmation code
+    bool isAccountLocked = true;                               // Track account lock state
     
 };
 
