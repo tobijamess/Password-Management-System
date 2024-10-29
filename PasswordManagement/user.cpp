@@ -1,6 +1,7 @@
 #include "user.h"
 #include "pwdStrength.h"
 #include "json.hpp"
+#include "encryption.h"
 #include <openssl/sha.h>
 #include <fstream>
 #include <sstream>
@@ -8,7 +9,7 @@
 
 using json = nlohmann::json;
 
-User::User(const std::string& username, const std::string& email) : username(username), email(email) {}
+User::User(const std::string& username, const std::string& email) : username(username), email(encryptPassword(email, username)) {}
 
 std::string User::hashPassword(const std::string& password) const {
     unsigned char hash[SHA256_DIGEST_LENGTH];
@@ -42,7 +43,7 @@ bool User::loadUserData(const std::string& inputPassword, bool isRecoveryMode) {
     json userData;
     file >> userData;
 
-    email = userData["email"];
+    email = decryptPassword(userData["email"], username);
     hashedPassword = userData["master_password_hash"];
 
     if (isRecoveryMode) {

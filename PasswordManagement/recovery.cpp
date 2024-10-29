@@ -53,7 +53,7 @@ void accountRecovery(const std::string& username) {
             std::string enteredCode = getTrimmedInput("Enter the recovery code: ");
 
             if (enteredCode == "exit") {
-                std::cout << "Returning to the main menu...\n";
+                std::cout << "Returning to the main menu...\n"; // Remove this for UI
                 return;
             }
 

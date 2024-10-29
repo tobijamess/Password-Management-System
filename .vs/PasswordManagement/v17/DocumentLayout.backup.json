@@ -3,16 +3,32 @@
   "WorkspaceRootPath": "F:\\Repos\\PasswordManagement\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|F:\\Repos\\PasswordManagement\\PasswordManagement\\user.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|solutionrelative:PasswordManagement\\user.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|F:\\Repos\\PasswordManagement\\PasswordManagement\\recovery.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|solutionrelative:PasswordManagement\\recovery.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|F:\\Repos\\PasswordManagement\\PasswordManagement\\smtp.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|solutionrelative:PasswordManagement\\smtp.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|F:\\Repos\\PasswordManagement\\PasswordManagement\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|solutionrelative:PasswordManagement\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\Repos\\PasswordManagement\\PasswordManagement\\test_data.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:PasswordManagement\\test_data.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|F:\\Repos\\PasswordManagement\\PasswordManagement\\user.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|solutionrelative:PasswordManagement\\user.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|F:\\Repos\\PasswordManagement\\PasswordManagement\\pwdManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|solutionrelative:PasswordManagement\\pwdManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|F:\\Repos\\PasswordManagement\\PasswordManagement\\pwdManager.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|solutionrelative:PasswordManagement\\pwdManager.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|F:\\Repos\\PasswordManagement\\PasswordManagement\\encryption.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|solutionrelative:PasswordManagement\\encryption.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|F:\\Repos\\PasswordManagement\\PasswordManagement\\user.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -23,16 +39,12 @@
       "RelativeMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|solutionrelative:PasswordManagement\\database.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|F:\\Repos\\PasswordManagement\\PasswordManagement\\recovery.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|solutionrelative:PasswordManagement\\recovery.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|F:\\Repos\\PasswordManagement\\PasswordManagement\\database.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|solutionrelative:PasswordManagement\\database.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|F:\\Repos\\PasswordManagement\\PasswordManagement\\smtp.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|solutionrelative:PasswordManagement\\smtp.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|F:\\Repos\\PasswordManagement\\PasswordManagement\\pwdManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|solutionrelative:PasswordManagement\\pwdManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|F:\\Repos\\PasswordManagement\\PasswordManagement\\util.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -45,14 +57,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|F:\\Repos\\PasswordManagement\\PasswordManagement\\recovery.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|solutionrelative:PasswordManagement\\recovery.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|F:\\Repos\\PasswordManagement\\PasswordManagement\\pwdManager.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|solutionrelative:PasswordManagement\\pwdManager.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|F:\\Repos\\PasswordManagement\\PasswordManagement\\encryption.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|solutionrelative:PasswordManagement\\encryption.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{30919CD0-2188-4BCD-89F0-C7F883EF7A45}|PasswordManagement\\PasswordManagement.vcxproj|F:\\Repos\\PasswordManagement\\PasswordManagement\\smtp.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -70,17 +74,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 13,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "main.cpp",
               "DocumentMoniker": "F:\\Repos\\PasswordManagement\\PasswordManagement\\main.cpp",
               "RelativeDocumentMoniker": "PasswordManagement\\main.cpp",
               "ToolTip": "F:\\Repos\\PasswordManagement\\PasswordManagement\\main.cpp",
               "RelativeToolTip": "PasswordManagement\\main.cpp",
-              "ViewState": "AgIAAEQAAAAAAAAAAAAAAFIAAAAuAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-08-24T09:37:56.742Z",
               "IsPinned": true,
@@ -88,20 +92,33 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
+              "Title": "test_data.json",
+              "DocumentMoniker": "F:\\Repos\\PasswordManagement\\PasswordManagement\\test_data.json",
+              "RelativeDocumentMoniker": "PasswordManagement\\test_data.json",
+              "ToolTip": "F:\\Repos\\PasswordManagement\\PasswordManagement\\test_data.json",
+              "RelativeToolTip": "PasswordManagement\\test_data.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-10-29T07:07:12.671Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "user.cpp",
               "DocumentMoniker": "F:\\Repos\\PasswordManagement\\PasswordManagement\\user.cpp",
               "RelativeDocumentMoniker": "PasswordManagement\\user.cpp",
               "ToolTip": "F:\\Repos\\PasswordManagement\\PasswordManagement\\user.cpp",
               "RelativeToolTip": "PasswordManagement\\user.cpp",
-              "ViewState": "AgIAABUAAAAAAAAAAAAAADQAAAA2AAAAAAAAAA==",
+              "ViewState": "AgIAAB0AAAAAAAAAAAAAADYAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-08-27T03:31:17.032Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 7,
               "Title": "user.h",
               "DocumentMoniker": "F:\\Repos\\PasswordManagement\\PasswordManagement\\user.h",
               "RelativeDocumentMoniker": "PasswordManagement\\user.h",
@@ -114,7 +131,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 11,
               "Title": "util.cpp",
               "DocumentMoniker": "F:\\Repos\\PasswordManagement\\PasswordManagement\\util.cpp",
               "RelativeDocumentMoniker": "PasswordManagement\\util.cpp",
@@ -127,7 +144,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 12,
               "Title": "util.h",
               "DocumentMoniker": "F:\\Repos\\PasswordManagement\\PasswordManagement\\util.h",
               "RelativeDocumentMoniker": "PasswordManagement\\util.h",
@@ -140,7 +157,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 9,
               "Title": "recovery.cpp",
               "DocumentMoniker": "F:\\Repos\\PasswordManagement\\PasswordManagement\\recovery.cpp",
               "RelativeDocumentMoniker": "PasswordManagement\\recovery.cpp",
@@ -153,7 +170,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 13,
               "Title": "recovery.h",
               "DocumentMoniker": "F:\\Repos\\PasswordManagement\\PasswordManagement\\recovery.h",
               "RelativeDocumentMoniker": "PasswordManagement\\recovery.h",
@@ -166,7 +183,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 8,
               "Title": "database.cpp",
               "DocumentMoniker": "F:\\Repos\\PasswordManagement\\PasswordManagement\\database.cpp",
               "RelativeDocumentMoniker": "PasswordManagement\\database.cpp",
@@ -179,7 +196,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 10,
               "Title": "database.h",
               "DocumentMoniker": "F:\\Repos\\PasswordManagement\\PasswordManagement\\database.h",
               "RelativeDocumentMoniker": "PasswordManagement\\database.h",
@@ -192,20 +209,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 4,
               "Title": "pwdManager.cpp",
               "DocumentMoniker": "F:\\Repos\\PasswordManagement\\PasswordManagement\\pwdManager.cpp",
               "RelativeDocumentMoniker": "PasswordManagement\\pwdManager.cpp",
               "ToolTip": "F:\\Repos\\PasswordManagement\\PasswordManagement\\pwdManager.cpp",
               "RelativeToolTip": "PasswordManagement\\pwdManager.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-08-24T10:06:31.22Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 5,
               "Title": "pwdManager.h",
               "DocumentMoniker": "F:\\Repos\\PasswordManagement\\PasswordManagement\\pwdManager.h",
               "RelativeDocumentMoniker": "PasswordManagement\\pwdManager.h",
@@ -218,7 +235,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 6,
               "Title": "encryption.h",
               "DocumentMoniker": "F:\\Repos\\PasswordManagement\\PasswordManagement\\encryption.h",
               "RelativeDocumentMoniker": "PasswordManagement\\encryption.h",
@@ -231,7 +248,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 0,
               "Title": "smtp.cpp",
               "DocumentMoniker": "F:\\Repos\\PasswordManagement\\PasswordManagement\\smtp.cpp",
               "RelativeDocumentMoniker": "PasswordManagement\\smtp.cpp",
@@ -244,7 +261,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "smtp.h",
               "DocumentMoniker": "F:\\Repos\\PasswordManagement\\PasswordManagement\\smtp.h",
               "RelativeDocumentMoniker": "PasswordManagement\\smtp.h",
@@ -257,7 +274,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 15,
               "Title": "encryption.cpp",
               "DocumentMoniker": "F:\\Repos\\PasswordManagement\\PasswordManagement\\encryption.cpp",
               "RelativeDocumentMoniker": "PasswordManagement\\encryption.cpp",
