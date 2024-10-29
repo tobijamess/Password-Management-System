@@ -4,27 +4,6 @@
 #include <openssl/rand.h>
 #include <curl/curl.h>
 
-// Function to generate a random recovery code
-// Uses cryptographically secure random bytes to generate a code of specified length
-std::string generateRecoveryCode(int length = 6) {
-    const char charset[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    std::string code;
-    code.resize(length);
-    std::vector<unsigned char> randomBytes(length);
-
-    // Generate random bytes for the recovery code
-    if (RAND_bytes(randomBytes.data(), length) != 1) {
-        throw std::runtime_error("Error generating random bytes for recovery code.");
-    }
-
-    // Map random bytes to characters from the charset
-    for (int i = 0; i < length; ++i) {
-        code[i] = charset[randomBytes[i] % (sizeof(charset) - 1)];
-    }
-
-    return code;  // Return the generated recovery code
-}
-
 // Function to send a recovery email using Mailjet's API and libcurl
 // Takes recipient email and the recovery code to be sent
 bool sendRecoveryEmail(const std::string& email, const std::string& recoveryCode) {
@@ -70,7 +49,7 @@ bool sendRecoveryEmail(const std::string& email, const std::string& recoveryCode
         curl_easy_setopt(curl, CURLOPT_MAIL_RCPT, recipients);  // Set email recipient
 
         // Set CA certificate path for secure communication
-        curl_easy_setopt(curl, CURLOPT_CAINFO, "openssl/tests/certs/cacert-2024-09-24.pem");  // Path to CA bundle for debug
+        curl_easy_setopt(curl, CURLOPT_CAINFO, "openssl/cert/cacert-2024-09-24.pem");  // Path to CA bundle for debug
         // curl_easy_setopt(curl, CURLOPT_CAINFO, "resources/cacert-2024-09-24.pem"); // Path to CA bundle for release
 
         // Perform the email request

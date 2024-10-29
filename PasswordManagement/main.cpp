@@ -8,19 +8,14 @@
 #include "database.h"
 #include "pwdManager.h"
 #include "pwdStrength.h"
+#include "recovery.h"
 #include "smtp.h"
+#include "util.h"
 #include <openssl/rand.h>
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 
 #define NOMINMAX  // Prevent issues with the Windows min/max macros
-
-// Function to initialize OpenSSL libraries
-void initializeOpenSSL() {
-//     SSL_library_init();  // Initialize the OpenSSL library
-//     OpenSSL_add_all_algorithms();  // Load encryption algorithms
-//     ERR_load_crypto_strings();  // Load error strings for diagnostics
-}
 
 // Function to generate a secure random password
 std::string generateSecurePassword(int length) {
@@ -46,93 +41,7 @@ std::string generateSecurePassword(int length) {
     return password;
 }
 
-// Function to handle password recovery for a user
-void passwordRecovery(const std::string& username) {
-    try {
-        User user(username, "", 2);  // Load user with username only to retrieve email
-
-        // Retrieve user's email from the database
-        if (!user.loadUserEmail()) {
-            std::cout << "Failed to load email for the user.\n";
-            return;
-        }
-
-        std::string storedEmail = user.getEmail();
-        if (storedEmail.empty()) {
-            std::cout << "No email found for this account. Please contact support.\n";
-            return;
-        }
-
-        // Generate a recovery code and send it via email
-        std::string recoveryCode = generateRecoveryCode();
-        if (!sendRecoveryEmail(storedEmail, recoveryCode)) {
-            std::cout << "Failed to send recovery email. Please try again later.\n";
-            return;
-        }
-        std::cout << "Recovery email sent to " << storedEmail << ".\n";
-
-        // Loop for entering recovery code
-        while (true) {
-            // Prompt the user to enter the recovery code
-            std::string enteredCode = getTrimmedInput("Enter the recovery code sent to your email (or type 'exit' to return to the main menu): ");
-
-            if (enteredCode == "exit") {
-                std::cout << "Returning to the main menu...\n";
-                return;  // Exit to the main menu
-            }
-
-            // Verify the recovery code and proceed to reset password
-            if (enteredCode == recoveryCode) {
-                std::cout << "Recovery code verified. You can now reset your password.\n";
-
-                std::string newPassword, passwordConfirmation;
-                while (true) {
-                    newPassword = getTrimmedInput("Enter new master password: ");
-                    PasswordStrength strength = evaluatePasswordStrength(newPassword);
-                    displayPasswordStrength(strength);
-
-                    if (strength == Weak) {
-                        std::cout << "Your password is too weak. Please choose a stronger one.\n";
-                        continue;
-                    }
-
-                    passwordConfirmation = getTrimmedInput("Confirm new master password: ");
-                    if (newPassword == passwordConfirmation) {
-                        // Update the master password in the user account
-                        user.updateMasterPassword(newPassword);
-                        std::cout << "Password has been reset successfully!\n";
-                        break;
-                    }
-                    else {
-                        std::cout << "Passwords do not match. Please try again.\n";
-                    }
-                }
-                return;  // Exit after successfully resetting the password
-            }
-            else {
-                std::cout << "Invalid recovery code. Please try again.\n";
-
-                // Give the user an option to re-enter the code or exit
-                int userChoice;
-                std::cout << "1. Try again\n2. Exit to main menu\nChoose an option: ";
-                std::cin >> userChoice;
-                std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
-
-                if (userChoice == 2) {
-                    std::cout << "Returning to the main menu...\n";
-                    return;  // Exit to the main menu
-                }
-            }
-        }
-
-    }
-    catch (const std::exception& e) {
-        std::cout << "Error: " << e.what() << "\n";
-    }
-}
-
 int main() {
-    initializeOpenSSL();
 
     std::string username, masterPassword, email;
     int choice;
@@ -145,8 +54,8 @@ int main() {
         // User authentication loop
         while (!authenticated) {
             std::cout << "\n--- Welcome to Password Manager! ---\n";
-            std::cout << "1. Create a new account\n2. Log in\n3. Exit\nChoose an option: ";
-            std::cin >> choice;
+            std::cout << "1. Create a new account\n2. Log in\n3. Exit\n ";
+            choice = getIntegerInput("Choose an option: ");
             std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');  // Clear input buffer
 
             if (choice == 1) {
@@ -234,12 +143,12 @@ int main() {
                     std::cout << "Authentication failed: " << e.what() << "\n";
 
                     int forgotPasswordChoice;
-                    std::cout << "Forgot Password?\n1. Yes\n2. No, try again\nChoose an option: ";
-                    std::cin >> forgotPasswordChoice;
+                    std::cout << "Forgot Password?\n1. Yes\n2. No, try again\n";
+                    forgotPasswordChoice = getIntegerInput("Choose an option: ");
                     std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
 
                     if (forgotPasswordChoice == 1) {
-                        passwordRecovery(username);
+                        accountRecovery(username);
                     }
                 }
 
@@ -258,8 +167,8 @@ int main() {
         while (true) {
             int menuChoice;
             std::cout << "\n--- Password Manager Menu ---\n";
-            std::cout << "1. Add New Password\n2. Show Stored Passwords\n3. Log Out\n4. Exit\nChoose an option: ";
-            std::cin >> menuChoice;
+            std::cout << "1. Add New Password\n2. Show Stored Passwords\n3. Log Out\n4. Exit\n";
+            menuChoice = getIntegerInput("Choose an option: ");
             std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
 
             if (menuChoice == 1) {
@@ -268,8 +177,8 @@ int main() {
                 account = getTrimmedInput("Enter platform or app name: ");
 
                 int passwordChoice;
-                std::cout << "1. Enter your password\n2. Generate a secure password\nChoose an option: ";
-                std::cin >> passwordChoice;
+                std::cout << "1. Enter your password\n2. Generate a secure password\n";
+                passwordChoice = getIntegerInput("Choose an option: ");
                 std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
 
                 if (passwordChoice == 1) {
@@ -291,8 +200,8 @@ int main() {
                 else if (passwordChoice == 2) {
                     // Generate a secure password
                     int length;
-                    std::cout << "Enter desired password length: ";
-                    std::cin >> length;
+                    std::cout << "Enter desired password character length: ";
+                    length = getIntegerInput("Length:");
                     std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
 
                     password = generateSecurePassword(length);

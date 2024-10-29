@@ -21,8 +21,6 @@ public:
 
     bool sendConfirmationCode();                           // Send the confirmation code
     bool verifyConfirmationCode(const std::string& code);  // Verify the confirmation code
-    void lockAccount();                                    // Lock the user account until confirmed
-    void unlockAccount();                                  // Unlock the user account
 
 private:
     std::string username;        // Stores the username for the user
@@ -34,10 +32,7 @@ private:
     void saveMasterPassword();                                 // Saves the hashed master password
     void saveUserEmail();                                      // Saves the users email
     std::string confirmationCode;                              // Store the confirmation code
-    bool isAccountLocked = true;                               // Track account lock state
     
 };
-
-std::string getTrimmedInput(const std::string& prompt);
 
 #endif // USER_H

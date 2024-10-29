@@ -3,7 +3,9 @@ F:\Repos\PasswordManagement\PasswordManagement\encryption.cpp;F:\Repos\PasswordM
 F:\Repos\PasswordManagement\PasswordManagement\pwdManager.cpp;F:\Repos\PasswordManagement\PasswordManagement\x64\Debug\pwdManager.obj
 F:\Repos\PasswordManagement\PasswordManagement\main.cpp;F:\Repos\PasswordManagement\PasswordManagement\x64\Debug\main.obj
 F:\Repos\PasswordManagement\PasswordManagement\pwdStrength.cpp;F:\Repos\PasswordManagement\PasswordManagement\x64\Debug\pwdStrength.obj
+F:\Repos\PasswordManagement\PasswordManagement\recovery.cpp;F:\Repos\PasswordManagement\PasswordManagement\x64\Debug\recovery.obj
 F:\Repos\PasswordManagement\PasswordManagement\smtp.cpp;F:\Repos\PasswordManagement\PasswordManagement\x64\Debug\smtp.obj
 F:\Repos\PasswordManagement\PasswordManagement\UI.cpp;F:\Repos\PasswordManagement\PasswordManagement\x64\Debug\UI.obj
 F:\Repos\PasswordManagement\PasswordManagement\database.cpp;F:\Repos\PasswordManagement\PasswordManagement\x64\Debug\database.obj
 F:\Repos\PasswordManagement\PasswordManagement\user.cpp;F:\Repos\PasswordManagement\PasswordManagement\x64\Debug\user.obj
+F:\Repos\PasswordManagement\PasswordManagement\util.cpp;F:\Repos\PasswordManagement\PasswordManagement\x64\Debug\util.obj
