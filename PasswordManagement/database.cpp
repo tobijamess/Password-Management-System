@@ -1,97 +1,52 @@
 #include "database.h"
-#include <iostream>
 #include <fstream>
-#include <stdexcept>
+#include "json.hpp"
 
-#ifdef _WIN32
-#include <sys/types.h>
-#include <sys/stat.h>
-#define STAT_STRUCT _stat64  // Use _stat64 for Windows
-#define STAT_FUNCTION _stat64
-#endif
+using json = nlohmann::json;
 
-// Constructor: Initialize Database with the user-specific filename
-Database::Database(const std::string& username) {
-    if (username.empty()) {
-        throw std::runtime_error("Username cannot be empty");
-    }
-    dbFilename = username + "_passwords.db";  // Set the database filename for the user
+Database::Database(const std::string& username)
+    : dbFilename(username + "_data.json") {}
+
+bool Database::fileExists(const std::string& filename) {
+    struct stat buffer;
+    return (stat(filename.c_str(), &buffer) == 0);
 }
 
-// Helper function to check if a file exists
-bool fileExists(const std::string& filename) {
-    struct STAT_STRUCT buffer;
-    return (STAT_FUNCTION(filename.c_str(), &buffer) == 0);
-}
-
-// Check if the user-specific database file already exists
-bool Database::doesDatabaseExist(const std::string& username) {
-    std::string filename = username + "_passwords.db";  // Construct filename
-    return fileExists(filename);  // Use fileExists helper function
-}
-
-// Create an empty password database for a new user
 void Database::createEmptyDatabase() {
-    std::string dbFilePath = dbFilename;  // Use the set filename
-
-    // Log the file path for user awareness
-    std::cout << "Attempting to create empty database at: " << dbFilePath << std::endl;
-
-    // Open the file in write mode to create an empty file
-    std::ofstream dbFile(dbFilePath, std::ios::out);
-    if (!dbFile) {
-        // Error handling if the file cannot be created
-        std::cerr << "Error: Could not create database file at " << dbFilePath << std::endl;
-        std::cerr << "Possible issues: incorrect file path, lack of write permissions, or directory issues." << std::endl;
-        return;
+    std::ofstream dbFile(dbFilename);
+    if (dbFile) {
+        json emptyDb = json::array();
+        dbFile << emptyDb.dump(4);
     }
-
-    std::cout << "Empty database file created successfully at " << dbFilePath << std::endl;
-    dbFile.close();  // Close the file after creation
 }
 
-// Save the password database to the user-specific file
 bool Database::savePasswordDatabase(const std::unordered_map<std::string, std::string>& passwordDatabase) {
-    std::ofstream file(dbFilename);  // Open the file for writing
+    std::ifstream file(dbFilename);
+    json userData;
+    if (file) file >> userData;
 
-    if (!file.is_open()) {
-        // Error handling if the file cannot be opened
-        std::cerr << "Failed to open " << dbFilename << " for writing." << std::endl;
-        return false;
-    }
+    userData["passwords"] = passwordDatabase;
 
-    // Write each account and its associated encrypted password to the file
-    for (const auto& entry : passwordDatabase) {
-        file << entry.first << " " << entry.second << std::endl;
-    }
+    std::ofstream outFile(dbFilename);
+    if (!outFile) return false;
 
-    file.close();  // Close the file after writing
+    outFile << userData.dump(4); // Write pretty-formatted JSON
     return true;
 }
 
-// Load the password database from the user-specific file
 std::unordered_map<std::string, std::string> Database::loadPasswordDatabase() {
     std::unordered_map<std::string, std::string> passwordDatabase;
+    std::ifstream file(dbFilename);
 
-    // Check if the database file exists
-    if (!fileExists(dbFilename)) {
-        std::cerr << "Database file does not exist or is not accessible: " << dbFilename << std::endl;
-        return passwordDatabase;  // Return an empty map if the file does not exist
-    }
+    if (file) {
+        json userData;
+        file >> userData;
 
-    std::ifstream file(dbFilename);  // Open the file for reading
-    if (!file.is_open()) {
-        throw std::runtime_error("Failed to open " + dbFilename + " for reading");
-    }
-
-    std::string account, encryptedPassword;
-    // Read each account and its encrypted password from the file
-    while (file >> account >> encryptedPassword) {
-        if (!account.empty() && !encryptedPassword.empty()) {
-            passwordDatabase[account] = encryptedPassword;  // Add to the map if valid
+        for (auto& item : userData["passwords"].items()) {
+            std::string key = item.key();
+            std::string value = item.value();
+            passwordDatabase[key] = value;
         }
     }
-
-    file.close();  // Close the file after reading
     return passwordDatabase;
 }

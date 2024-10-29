@@ -12,14 +12,11 @@ public:
     // Creates an empty password database for a new user
     void createEmptyDatabase();
 
-    // Checks if a database file exists for the user
-    static bool doesDatabaseExist(const std::string& username);
+    static bool fileExists(const std::string& filename);
 
-    // Loads the password database from a user-specific file
+    bool savePasswordDatabase(const std::unordered_map<std::string, std::string>& passwordDatabase);
     std::unordered_map<std::string, std::string> loadPasswordDatabase();
 
-    // Saves the password database to a user-specific file
-    bool savePasswordDatabase(const std::unordered_map<std::string, std::string>& passwordDatabase);
 
 private:
     std::string dbFilename;  // Stores the name of the user-specific database file

@@ -27,19 +27,20 @@ std::string generateRecoveryCode() {
 // Function to handle password recovery for a user
 void accountRecovery(const std::string& username) {
     try {
-        User user(username, "", 2);
-
-        if (!user.loadUserEmail()) {
-            std::cout << "Failed to load email for the user.\n";
+        // Load user data from JSON
+        User user(username, "");
+        if (!user.loadUserData("", true)) {  // Attempt to load data without verifying password
+            std::cout << "Failed to load user data.\n";
             return;
         }
 
-        std::string storedEmail = user.getEmail();
+        std::string storedEmail = user.email;
         if (storedEmail.empty()) {
             std::cout << "No email found for this account. Please contact support.\n";
             return;
         }
 
+        // Generate and send recovery code
         std::string recoveryCode = generateRecoveryCode();
         if (!sendRecoveryEmail(storedEmail, recoveryCode)) {
             std::cout << "Failed to send recovery email. Please try again later.\n";
@@ -58,7 +59,26 @@ void accountRecovery(const std::string& username) {
 
             if (enteredCode == recoveryCode) {
                 std::cout << "Recovery code verified.\n";
-                // Handle password reset logic here...
+
+                // Password reset loop
+                while (true) {
+                    std::string newPassword = getTrimmedInput("Enter new master password: ");
+                    std::string confirmPassword = getTrimmedInput("Confirm new master password: ");
+
+                    if (newPassword != confirmPassword) {
+                        std::cout << "Passwords do not match. Please try again.\n";
+                        continue;
+                    }
+
+                    // Update password in the user data and re-encrypt database
+                    if (!user.saveUserData(newPassword)) {
+                        std::cout << "Failed to update password.\n";
+                        return;
+                    }
+
+                    std::cout << "Password reset successfully!\n";
+                    break;
+                }
                 break;
             }
             else {

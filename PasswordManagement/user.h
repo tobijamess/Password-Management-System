@@ -6,31 +6,20 @@ class User {
 public:
 
     // Unified constructor for both registration and login
-    User(const std::string& username, const std::string& passwordOrEmail, int mode);
+    User(const std::string& username, const std::string& email);
 
-    // Registers a new user by hashing the given password and saving it
-    bool registerUser(const std::string& password);
+    bool verifyPassword(const std::string& inputPassword) const;
 
-    bool updateMasterPassword(const std::string& newPassword); // Update the master password
+    bool saveUserData(const std::string& password);
+    bool loadUserData(const std::string& inputPassword, bool isRecoveryMode);
 
-    std::string getMasterKey() const;  // Returns the hashed master password
-    std::string getUsername() const;   // Returns the username
-
-    std::string getEmail() const;      // Returns the email
-    bool loadUserEmail();              // Loads users email
-
-    bool sendConfirmationCode();                           // Send the confirmation code
-    bool verifyConfirmationCode(const std::string& code);  // Verify the confirmation code
-
-private:
     std::string username;        // Stores the username for the user
-    std::string hashedPassword;  // Stores the hashed master password
     std::string email;           // Stores the users email
 
-    std::string hashPassword(const std::string& password);     // Hashes the given password using SHA-256
-    bool loadMasterPassword(const std::string& inputPassword); // Loads the hashed master password from a file
-    void saveMasterPassword();                                 // Saves the hashed master password
-    void saveUserEmail();                                      // Saves the users email
+private:
+
+    std::string hashedPassword;  // Stores the hashed master password
+    std::string hashPassword(const std::string& password) const;     // Hashes the given password using SHA-256
     std::string confirmationCode;                              // Store the confirmation code
     
 };
