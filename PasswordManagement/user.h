@@ -21,6 +21,7 @@ private:
     std::string hashedPassword;  // Stores the hashed master password
     std::string hashPassword(const std::string& password) const;     // Hashes the given password using SHA-256
     std::string confirmationCode;                              // Store the confirmation code
+    static const std::string emailEncryptionKey;
     
 };
 

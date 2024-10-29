@@ -23,6 +23,7 @@ std::string generateSecurePassword(int length) {
         throw std::runtime_error("Error generating random bytes for password.");
     }
 
+    // Fill password with random characters from charset
     for (int i = 0; i < length; ++i) {
         password[i] = charset[randomBytes[i] % (sizeof(charset) - 1)];
     }
@@ -34,16 +35,19 @@ int main() {
     std::string username, masterPassword;
     int choice;
 
+    // Main application loop
     while (true) {
         PasswordManager pm("");
         bool authenticated = false;
 
+        // Authentication loop
         while (!authenticated) {
             std::cout << "\n--- Welcome to Password Manager! ---\n";
-            std::cout << "1. Create a new account\n2. Log in\n3. Exit\n ";
+            std::cout << "1. Create a new account\n2. Log in\n3. Exit\n";
             choice = getIntegerInput("Choose an option: ");
 
             if (choice == 1) {
+                // Account creation
                 username = getTrimmedInput("Enter desired username: ");
                 std::string email = getTrimmedInput("Enter your email: ");
 
@@ -52,6 +56,7 @@ int main() {
                     continue;
                 }
 
+                // Master password creation and confirmation
                 std::string masterPassword, masterPasswordConfirmation;
                 while (true) {
                     masterPassword = getTrimmedInput("Enter master password: ");
@@ -74,19 +79,42 @@ int main() {
                 authenticated = true;
             }
             else if (choice == 2) {
+                // Login process
                 username = getTrimmedInput("Enter username: ");
-                masterPassword = getTrimmedInput("Enter master password: ");
+                Database db(username);
+                std::string recoveryCode;
 
+                // Check if the account is in recovery mode
+                if (db.getRecoveryStatus(username, recoveryCode)) {
+                    std::cout << "This account is in recovery mode.\n";
+                    accountRecovery(username); // Call once and return to main loop after recovery
+
+                    // Check if recovery mode is cleared after `accountRecovery`
+                    if (db.getRecoveryStatus(username, recoveryCode)) {
+                        // If still in recovery mode, exit and prompt login again
+                        continue;
+                    }
+                }
+
+                // Prompt for master password after recovery if needed
+                masterPassword = getTrimmedInput("Enter master password: ");
                 User user(username, masterPassword);
+
                 if (!user.loadUserData(masterPassword, false)) {
                     std::cout << "Authentication failed.\n";
                     accountRecovery(username);
-                }
 
-                Database db(username);
-                pm.loadDatabase(db.loadPasswordDatabase());
-                std::cout << "Login successful!\n";
-                authenticated = true;
+                    // Check if recovery resolved the issue, then continue or break loop
+                    if (db.getRecoveryStatus(username, recoveryCode)) {
+                        continue;
+                    }
+                }
+                else {
+                    // Successful login, load database and set authenticated status
+                    pm.loadDatabase(db.loadPasswordDatabase());
+                    std::cout << "Login successful!\n";
+                    authenticated = true;
+                }
             }
             else if (choice == 3) {
                 std::cout << "Exiting...\n";
@@ -97,6 +125,7 @@ int main() {
             }
         }
 
+        // Main menu loop after login
         while (true) {
             int menuChoice;
             std::cout << "\n--- Password Manager Menu ---\n";
@@ -104,6 +133,7 @@ int main() {
             menuChoice = getIntegerInput("Choose an option: ");
 
             if (menuChoice == 1) {
+                // Add a new password
                 std::string account = getTrimmedInput("Enter platform or app name: ");
                 std::string password;
                 int passwordChoice;
@@ -112,6 +142,7 @@ int main() {
                 passwordChoice = getIntegerInput("Choose an option: ");
 
                 if (passwordChoice == 1) {
+                    // Prompt for password input
                     while (true) {
                         password = getTrimmedInput("Enter your password: ");
                         if (evaluatePasswordStrength(password) != Weak) break;
@@ -119,6 +150,7 @@ int main() {
                     }
                 }
                 else if (passwordChoice == 2) {
+                    // Generate secure password
                     int length;
                     std::cout << "Enter password length:\n";
                     length = getIntegerInput("Length: ");
@@ -141,6 +173,7 @@ int main() {
                 }
             }
             else if (menuChoice == 2) {
+                // Display stored passwords
                 std::cout << "\n--- Viewing Stored Passwords ---\n";
                 for (const auto& entry : pm.getPasswordDatabase()) {
                     std::cout << "Account: " << entry.first << ", Password: " << pm.getPassword(entry.first) << std::endl;

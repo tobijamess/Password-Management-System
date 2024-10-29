@@ -17,6 +17,10 @@ public:
     bool savePasswordDatabase(const std::unordered_map<std::string, std::string>& passwordDatabase);
     std::unordered_map<std::string, std::string> loadPasswordDatabase();
 
+    bool setRecoveryStatus(const std::string& username, bool inRecovery, const std::string& recoveryCode = "");
+    bool getRecoveryStatus(const std::string& username, std::string& recoveryCode);
+
+    bool clearPasswords();
 
 private:
     std::string dbFilename;  // Stores the name of the user-specific database file

@@ -1,7 +1,8 @@
-#include "recovery.h"
+#include "database.h"
 #include "user.h"
 #include "pwdStrength.h"
 #include "smtp.h" // For email functions
+#include "recovery.h"
 #include <openssl/rand.h>
 #include <iostream>
 #include <vector>
@@ -24,41 +25,54 @@ std::string generateRecoveryCode() {
     return code;
 }
 
-// Function to handle password recovery for a user
+// Function to handle account recovery with persistent recovery status
 void accountRecovery(const std::string& username) {
     try {
-        // Load user data from JSON
+        // Load user data without password verification
         User user(username, "");
-        if (!user.loadUserData("", true)) {  // Attempt to load data without verifying password
+        if (!user.loadUserData("", true)) {
             std::cout << "Failed to load user data.\n";
             return;
         }
 
+        // Retrieve the email associated with the account
         std::string storedEmail = user.email;
         if (storedEmail.empty()) {
             std::cout << "No email found for this account. Please contact support.\n";
             return;
         }
 
-        // Generate and send recovery code
-        std::string recoveryCode = generateRecoveryCode();
-        if (!sendRecoveryEmail(storedEmail, recoveryCode)) {
-            std::cout << "Failed to send recovery email. Please try again later.\n";
-            return;
-        }
-        std::cout << "Recovery email sent to " << storedEmail << ".\n";
+        Database db(username);
+        std::string recoveryCode;
 
-        // Code entry and password reset loop
+        // Check if recovery is already in progress
+        if (!db.getRecoveryStatus(username, recoveryCode)) {
+            // Generate and store a new recovery code if recovery is not already set
+            recoveryCode = generateRecoveryCode();
+            db.setRecoveryStatus(username, true, recoveryCode);
+
+            // Send the recovery code via email
+            if (!sendRecoveryEmail(storedEmail, recoveryCode)) {
+                std::cout << "Failed to send recovery email. Please try again later.\n";
+                return;
+            }
+            std::cout << "Recovery email sent to " << storedEmail << ".\n";
+        }
+
+        // Recovery code entry and verification loop
         while (true) {
             std::string enteredCode = getTrimmedInput("Enter the recovery code: ");
 
             if (enteredCode == "exit") {
-                std::cout << "Returning to the main menu...\n"; // Remove this for UI
+                std::cout << "Returning to the main menu...\n";
                 return;
             }
 
             if (enteredCode == recoveryCode) {
                 std::cout << "Recovery code verified.\n";
+
+                // Reset the password and clear the recovery status in the database
+                db.setRecoveryStatus(username, false);  // Clear the recovery status immediately after verification
 
                 // Password reset loop
                 while (true) {
@@ -70,15 +84,24 @@ void accountRecovery(const std::string& username) {
                         continue;
                     }
 
-                    // Update password in the user data and re-encrypt database
+                    // Update password in user data
                     if (!user.saveUserData(newPassword)) {
                         std::cout << "Failed to update password.\n";
                         return;
                     }
 
                     std::cout << "Password reset successfully!\n";
+
+                    // Clear old passwords after successful reset
+                    if (!db.clearPasswords()) {
+                        std::cout << "Failed to clear old passwords.\n";
+                        return;
+                    }
+
                     break;
                 }
+
+                // Break out of the outer loop to prevent re-triggering recovery
                 break;
             }
             else {
