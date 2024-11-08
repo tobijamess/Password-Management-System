@@ -23,10 +23,8 @@ bool sendRecoveryEmail(const std::string& email, const std::string& recoveryCode
         // Mailjet API credentials (replace with environment variables or config in production)
         const std::string mailjetApiKey = "example";
         const std::string mailjetSecretKey = "example";
-
         // Set up recipient email
         struct curl_slist* recipients = curl_slist_append(nullptr, email.c_str());
-
         // Set up email headers
         struct curl_slist* headers = curl_slist_append(nullptr, "Content-Type: application/json");
 
@@ -51,7 +49,6 @@ bool sendRecoveryEmail(const std::string& email, const std::string& recoveryCode
         curl_easy_setopt(curl, CURLOPT_USERNAME, mailjetApiKey.c_str());  // Set Mailjet API key
         curl_easy_setopt(curl, CURLOPT_PASSWORD, mailjetSecretKey.c_str());  // Set Mailjet secret key
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, jsonPayload.c_str());  // Set the JSON payload as POST data
-        // curl_easy_setopt(curl, CURLOPT_MAIL_RCPT, recipients);  // Set email recipient
 
         // Set CA certificate path for secure communication
         //curl_easy_setopt(curl, CURLOPT_CAINFO, "openssl/cert/cacert-2024-09-24.pem");  // Path to CA bundle for debug
@@ -71,10 +68,8 @@ bool sendRecoveryEmail(const std::string& email, const std::string& recoveryCode
             std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
             return false;  // Return false if email sending failed
         }
-
         return true;  // Email sent successfully
     }
-
     // Return false if curl could not be initialized
     return false;
 }

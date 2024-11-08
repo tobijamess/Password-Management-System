@@ -246,171 +246,176 @@ void RenderUI() {
         }
         break;
 
-        case FORGOT_PASSWORD:
-            ImGui::Text("Forgot Password");
-            ImGui::Text("WARNING: Resetting your password will cause your stored passwords to be wiped.");
-            CenteredInputField("Username", "##username", usernameBuffer, IM_ARRAYSIZE(usernameBuffer));
-            ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2);
+    case FORGOT_PASSWORD:
+        ImGui::Text("Forgot Password");
+        ImGui::Text("WARNING: Resetting your password will cause your stored passwords to be wiped.");
+        CenteredInputField("Username", "##username", usernameBuffer, IM_ARRAYSIZE(usernameBuffer));
+        ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2);
 
-            if (ImGui::Button("Send Recovery Email")) {
-                std::string username(usernameBuffer);
-                User user(username, "");
-                if (user.loadUserData("", true)) {
-                    std::string email = user.getEmail();
-                    std::string recoveryCode = generateRecoveryCode();
-                    Database(username).setRecoveryStatus(username, true, recoveryCode);
+        if (ImGui::Button("Send Recovery Email")) {
+            std::string username(usernameBuffer);
+            User user(username, "");
+            if (user.loadUserData("", true)) {
+                std::string email = user.getEmail();
+                std::string recoveryCode = generateRecoveryCode();
+                Database(username).setRecoveryStatus(username, true, recoveryCode);
 
-                    if (sendRecoveryEmail(email, recoveryCode)) {
-                        ShowStatusMessage("Recovery email sent.");
-                        currentScene = RECOVERY_SENT;
-                    } else {
-                        ShowStatusMessage("Failed to send recovery email.");
-                    }
-                } else {
-                    ShowStatusMessage("User not found.");
-                }
-            }
-            ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2);
-            if (ImGui::Button("Back")) {
-                currentScene = LOGIN;
-            }
-            break;
-
-        case RECOVERY_SENT:
-            ImGui::Text("Enter Recovery Code:");
-            ImGui::Text("Check your spam folder if you cannot find it.");
-            CenteredInputField("Recovery Code", "##recoverycode", recoveryCodeBuffer, IM_ARRAYSIZE(recoveryCodeBuffer));
-
-            ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2);
-            if (ImGui::Button("Submit")) {
-                std::string username(usernameBuffer);
-                std::string enteredCode(recoveryCodeBuffer);
-                if (Database(username).validateRecoveryCode(username, enteredCode)) {
-                    currentScene = RESET_PASSWORD;
-                } else {
-                    ShowStatusMessage("Invalid recovery code.");
-                }
-            }
-            break;
-
-        case RESET_PASSWORD:
-            ImGui::Text("Reset Master Password");
-            CenteredInputField("New Master Password", "##newmasterpassword", masterPasswordBuffer, IM_ARRAYSIZE(masterPasswordBuffer), ImGuiInputTextFlags_Password);
-            CenteredInputField("Confirm New Password", "##confirmnewpassword", confirmPasswordBuffer, IM_ARRAYSIZE(confirmPasswordBuffer), ImGuiInputTextFlags_Password);
-
-            ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2);
-            if (ImGui::Button("Reset Password")) {
-                if (strcmp(masterPasswordBuffer, confirmPasswordBuffer) == 0) {
-                    std::string username(usernameBuffer);
-                    std::string newMasterPassword(masterPasswordBuffer);
-                    User user(username, "");
-                    Database(username).clearPasswords();
-                    user.saveUserData(newMasterPassword);
-                    ShowStatusMessage("Password reset successfully.");
-                    currentScene = MAIN_MENU;
-                } else {
-                    ShowStatusMessage("Passwords do not match.");
-                }
-            }
-            break;
-
-        case PASSWORD_MANAGER:
-            ImGui::Text("--- Password Manager Menu ---");
-
-            ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2);
-            if (ImGui::Button("Add New Password")) {
-                currentScene = ADD_PASSWORD;
-            }
-            ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2);
-            if (ImGui::Button("View Stored Passwords")) {
-                currentScene = VIEW_PASSWORDS;
-            }
-            ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2);
-            if (ImGui::Button("Log Out")) {
-                authenticated = false;
-                currentScene = MAIN_MENU;
-            }
-            break;
-
-        case ADD_PASSWORD: {
-            static std::string account, password, generatedPassword;
-            static char accountBuffer[64] = "";
-            static char passwordBuffer[128] = "";
-            static int passwordChoice = 0;
-            static int length = 12;
-            static bool showGeneratedPassword = false;
-
-            ImGui::Text("Add New Password");
-            CenteredInputField("Account or App Name", "##accountorappname", accountBuffer, IM_ARRAYSIZE(accountBuffer));
-
-            ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2);
-            ImGui::RadioButton("Enter your password", &passwordChoice, 1);
-            ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2);
-            ImGui::RadioButton("Generate a secure password", &passwordChoice, 2);
-
-            if (passwordChoice == 1) {
-                CenteredInputField("Your Password", "##yourpassword", passwordBuffer, sizeof(passwordBuffer), ImGuiInputTextFlags_Password);
-            }
-            else if (passwordChoice == 2) {
-                ImGui::InputInt("Password Length", &length);
-
-                ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2);
-                if (ImGui::Button("Generate Password")) {
-                    generatedPassword = generateSecurePassword(length);
-                    showGeneratedPassword = true;
-                }
-                if (showGeneratedPassword) {
-                    ImGui::Text("Generated Password: %s", generatedPassword.c_str());
-                    password = generatedPassword;
-                }
-            }
-
-            ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2);
-            if (ImGui::Button("Save Password")) {
-                account = accountBuffer;
-                if (passwordChoice == 1) password = passwordBuffer;
-
-                if (evaluatePasswordStrength(password) == Weak) {
-                    ShowStatusMessage("Weak password. Choose another.");
+                if (sendRecoveryEmail(email, recoveryCode)) {
+                    ShowStatusMessage("Recovery email sent.");
+                    currentScene = RECOVERY_SENT;
                 }
                 else {
-                    pm.addPassword(account, password);
-                    Database db(loggedInUser.getUsername());
-                    if (db.savePasswordDatabase(pm.getPasswordDatabase())) {
-                        ShowStatusMessage("Password added successfully!");
-                    }
-                    else {
-                        ShowStatusMessage("Failed to save password.");
-                    }
+                    ShowStatusMessage("Failed to send recovery email.");
                 }
-            }
-            ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2);
-            if (ImGui::Button("Back")) {
-                currentScene = PASSWORD_MANAGER;
-            }
-            break;
-        }
-
-        case VIEW_PASSWORDS: {
-            ImGui::Text("--- Viewing Stored Passwords ---");
-
-            const auto& db = pm.getPasswordDatabase();
-            if (db.empty()) {
-                ShowStatusMessage("No passwords stored.");
             }
             else {
-                for (const auto& entry : db) {
-                    std::string decryptedPassword = pm.getPassword(entry.first);
-                    ImGui::Text("Account: %s, Password: %s", entry.first.c_str(), decryptedPassword.c_str());
-                }
+                ShowStatusMessage("User not found.");
             }
+        }
+        ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2);
+        if (ImGui::Button("Back")) {
+            currentScene = LOGIN;
+        }
+        break;
+
+    case RECOVERY_SENT:
+        ImGui::Text("Enter Recovery Code:");
+        ImGui::Text("Check your spam folder if you cannot find it.");
+        CenteredInputField("Recovery Code", "##recoverycode", recoveryCodeBuffer, IM_ARRAYSIZE(recoveryCodeBuffer));
+
+        ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2);
+        if (ImGui::Button("Submit")) {
+            std::string username(usernameBuffer);
+            std::string enteredCode(recoveryCodeBuffer);
+            if (Database(username).validateRecoveryCode(username, enteredCode)) {
+                currentScene = RESET_PASSWORD;
+            }
+            else {
+                ShowStatusMessage("Invalid recovery code.");
+            }
+        }
+        break;
+
+    case RESET_PASSWORD:
+        ImGui::Text("Reset Master Password");
+        CenteredInputField("New Master Password", "##newmasterpassword", masterPasswordBuffer, IM_ARRAYSIZE(masterPasswordBuffer), ImGuiInputTextFlags_Password);
+        CenteredInputField("Confirm New Password", "##confirmnewpassword", confirmPasswordBuffer, IM_ARRAYSIZE(confirmPasswordBuffer), ImGuiInputTextFlags_Password);
+
+        ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2);
+        if (ImGui::Button("Reset Password")) {
+            if (strcmp(masterPasswordBuffer, confirmPasswordBuffer) == 0) {
+                std::string username(usernameBuffer);
+                std::string newMasterPassword(masterPasswordBuffer);
+                User user(username, "");
+                Database(username).clearPasswords();
+                user.saveUserData(newMasterPassword);
+                Database(username).setRecoveryStatus(username, false);
+                ShowStatusMessage("Password reset successfully.");
+                currentScene = MAIN_MENU;
+            }
+            else {
+                ShowStatusMessage("Passwords do not match.");
+            }
+        }
+        break;
+
+    case PASSWORD_MANAGER:
+        ImGui::Text("--- Password Manager Menu ---");
+
+        ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2);
+        if (ImGui::Button("Add New Password")) {
+            currentScene = ADD_PASSWORD;
+        }
+        ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2);
+        if (ImGui::Button("View Stored Passwords")) {
+            currentScene = VIEW_PASSWORDS;
+        }
+        ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2);
+        if (ImGui::Button("Log Out")) {
+            authenticated = false;
+            currentScene = MAIN_MENU;
+        }
+        break;
+
+    case ADD_PASSWORD: {
+        static std::string account, password, generatedPassword;
+        static char accountBuffer[64] = "";
+        static char passwordBuffer[128] = "";
+        static int passwordChoice = 0;
+        static int length = 12;
+        static bool showGeneratedPassword = false;
+
+        ImGui::Text("Add New Password");
+        CenteredInputField("Account or App Name", "##accountorappname", accountBuffer, IM_ARRAYSIZE(accountBuffer));
+
+        ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2);
+        ImGui::RadioButton("Enter your password", &passwordChoice, 1);
+        ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2);
+        ImGui::RadioButton("Generate a secure password", &passwordChoice, 2);
+
+        if (passwordChoice == 1) {
+            CenteredInputField("Your Password", "##yourpassword", passwordBuffer, sizeof(passwordBuffer), ImGuiInputTextFlags_Password);
+        }
+        else if (passwordChoice == 2) {
+            ImGui::InputInt("Password Length", &length);
 
             ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2);
-            if (ImGui::Button("Back")) {
-                currentScene = PASSWORD_MANAGER;
+            if (ImGui::Button("Generate Password")) {
+                generatedPassword = generateSecurePassword(length);
+                showGeneratedPassword = true;
             }
-            break;
+            if (showGeneratedPassword) {
+                ImGui::Text("Generated Password: %s", generatedPassword.c_str());
+                password = generatedPassword;
+            }
         }
+
+        ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2);
+        if (ImGui::Button("Save Password")) {
+            account = accountBuffer;
+            if (passwordChoice == 1) password = passwordBuffer;
+
+            if (evaluatePasswordStrength(password) == Weak) {
+                ShowStatusMessage("Weak password. Choose another.");
+            }
+            else {
+                pm.addPassword(account, password);
+                Database db(loggedInUser.getUsername());
+                if (db.savePasswordDatabase(pm.getPasswordDatabase())) {
+                    ShowStatusMessage("Password added successfully!");
+                }
+                else {
+                    ShowStatusMessage("Failed to save password.");
+                }
+            }
+        }
+        ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2);
+        if (ImGui::Button("Back")) {
+            currentScene = PASSWORD_MANAGER;
+        }
+        break;
+    }
+
+    case VIEW_PASSWORDS: {
+        ImGui::Text("--- Viewing Stored Passwords ---");
+
+        const auto& db = pm.getPasswordDatabase();
+        if (db.empty()) {
+            ShowStatusMessage("No passwords stored.");
+        }
+        else {
+            for (const auto& entry : db) {
+                std::string decryptedPassword = pm.getPassword(entry.first);
+                ImGui::Text("Account: %s, Password: %s", entry.first.c_str(), decryptedPassword.c_str());
+            }
+        }
+
+        ImGui::SetCursorPosX((windowSize.x - buttonSize.x) / 2);
+        if (ImGui::Button("Back")) {
+            currentScene = PASSWORD_MANAGER;
+        }
+        break;
+    }
     }
 
     ImGui::End();

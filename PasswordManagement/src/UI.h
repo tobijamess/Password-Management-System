@@ -19,4 +19,4 @@ bool InitializeUI(HWND windowHandle);
 void RenderUI();
 void CleanupUI();
 
-#endif // UI_H
+#endif
